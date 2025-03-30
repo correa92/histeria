@@ -1,0 +1,11 @@
+# Ignorar directorios 'bin'
+bin/
+
+# Otras configuraciones comunes...
+node_modules/
+logs
+*.log
+*.tsbuildinfo
+.vscode/
+.idea/
+
