@@ -20,6 +20,7 @@ public class MatrixService {
 	private Map<Integer, Button> buttons;
 	private Color colorDefault = new Color(200, 200, 200);
 	private ScoreService _scoreService = new ScoreService();
+	private Color nextColor;
 
 	private Color[] listColorsDefault = new Color[] { new Color(197, 108, 240), new Color(50, 255, 126),
 			new Color(255, 56, 56), new Color(255, 159, 26), new Color(255, 242, 0), new Color(24, 220, 255) };
@@ -35,6 +36,7 @@ public class MatrixService {
 		matrix = new int[row][column];
 		buttons = new HashMap<>();
 		listAdjacentsAux = new HashSet<>();
+		nextColor = colorRandom();
 	}
 
 	public void Init() {
@@ -59,10 +61,6 @@ public class MatrixService {
 		return _scoreService.getScores();
 	}
 	
-	public void incrementScore() {
-		_scoreService.addPoint();
-	}
-	
 	public void resetScore() {
 		_scoreService.resetScore();
 	}
@@ -81,7 +79,8 @@ public class MatrixService {
 		for (Integer adj : buttons.get(id).getAdjacents()) {
 			list.add(buttons.get(adj));
 		}
-		incrementScore();
+		_scoreService.addPoint();
+		nextColor = colorRandom();
 		return list;
 	}
 
@@ -112,7 +111,7 @@ public class MatrixService {
 
 	private void compareButtonWithAdjacent(Button button) {
 
-		button.setColor(colorRandom());
+		button.setColor(nextColor);
 
 		for (Integer adj : button.getAdjacents()) {
 
