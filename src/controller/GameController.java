@@ -10,6 +10,7 @@ import model.service.MatrixService;
 import model.service.ScoreService;
 
 import java.awt.*;
+import java.io.IOException;
 
 public class GameController {
 	private JFrame frame;
@@ -45,11 +46,7 @@ public class GameController {
 	}
 
 	private void setupListeners() {
-		try {
 
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 		mainMenu.addPlayListener(e -> {
 			matrixService.Init();
 
@@ -62,7 +59,6 @@ public class GameController {
 				for (int j = 0; j < buttons[i].length; j++) {
 
 					int buttonId = Integer.parseInt(buttons[i][j].getActionCommand());
-
 					buttons[i][j].addActionListener(event -> handleButtonClick(buttonId));
 				}
 			}
@@ -77,12 +73,14 @@ public class GameController {
 		mainMenu.addExitListener(e -> System.exit(0));
 
 		gameScreen.addBackListener(e -> {
-			matrixService.resetScore();
-			gameScreen.updateScore(matrixService.getScore());
-			cardLayout.show(mainPanel, "Menu");
+				matrixService.resetScore();
+				gameScreen.updateScore(matrixService.getScore());
+				cardLayout.show(mainPanel, "Menu");
 		});
 
-		scoreScreen.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
+		scoreScreen.addBackListener(e -> {
+			cardLayout.show(mainPanel, "Menu");
+		});
 	}
 
 	private void handleButtonClick(int buttonId) {

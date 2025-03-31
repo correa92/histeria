@@ -32,8 +32,12 @@ public class ScoreScreen extends JPanel {
 
     public void updateScores(List<Score> scores) {
         scoreArea.setText("");
+        
+        for (int i = 0; i < scores.size(); i++) {
+        	scoreArea.append((i+1)+" - " + scores.get(i).getPlayerName() + ": " + scores.get(i).getPoints() + " puntos\n");			
+		}
+        
         for (Score score : scores) {
-            scoreArea.append(score.getPlayerName() + ": " + score.getPoints() + " puntos\n");
         }
     }
 }

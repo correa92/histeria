@@ -1,6 +1,7 @@
 package model.service;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ public class MatrixService {
 	private Color colorDefault = new Color(200, 200, 200);
 	private ScoreService _scoreService = new ScoreService();
 	private Color nextColor;
+
 
 	private Color[] listColorsDefault = new Color[] { new Color(197, 108, 240), new Color(50, 255, 126),
 			new Color(255, 56, 56), new Color(255, 159, 26), new Color(255, 242, 0), new Color(24, 220, 255) };
@@ -46,25 +48,31 @@ public class MatrixService {
 			AssignAdjacents();
 
 			resetData();
-
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e);
 		}
 	}
-	
+
 	public int getScore() {
 		return _scoreService.getScore();
 	}
-	
-	public List<Score> getListScore(){
+
+	public List<Score> getListScore() {
 		return _scoreService.getScores();
 	}
-	
+
 	public void resetScore() {
 		_scoreService.resetScore();
 	}
-	
+
+	public void saveScore() throws IOException {
+		try {
+			_scoreService.saveUserAndScore();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 
 	public List<Button> getButtonAndAdjancents(int id) throws Exception {
 
