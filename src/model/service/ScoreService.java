@@ -51,9 +51,9 @@ public class ScoreService {
 		return nameRandom.toString();
 	}
 
-	public void saveUserAndScore() {
+	public void saveUserAndScore(String namePlayer) {
 		try {
-			currentUser.setPlayerName(playerRandom());
+			currentUser.setPlayerName(namePlayer);
 			saveScores();
 
 		} catch (IOException e) {

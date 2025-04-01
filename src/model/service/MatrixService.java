@@ -68,14 +68,6 @@ public class MatrixService {
 		_scoreService.resetScore();
 	}
 
-	public void saveScore() throws IOException {
-		try {
-			_scoreService.saveUserAndScore();
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-
 	public List<Button> getButtonAndAdjancents(int id) throws Exception {
 
 		if (id < 0 || id >= this.buttons.size())
@@ -322,11 +314,14 @@ public class MatrixService {
 			if (btn.getColor().equals(colorDefault))
 				return false;
 		}
-		_scoreService.saveUserAndScore();
+		return true;
+	}
+	
+	public void endGame(String namePlayer) {
+		_scoreService.saveUserAndScore(namePlayer);
 		_scoreService.resetScore();
 		resetData();
 		resetMatrix();
-		return true;
 	}
 
 	private Color colorRandom() {

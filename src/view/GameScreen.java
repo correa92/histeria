@@ -15,11 +15,10 @@ public class GameScreen extends JPanel {
 	private JPanel panelGrid;
 	private JButton[][] btnsMatrix;
 	private int score = 0;
-	private JFrame _frame;
+	private String namePlayer;
 
-	public GameScreen(int row, int column, JFrame frame) {
+	public GameScreen(int row, int column) {
 
-		_frame = frame;
 		btnsMatrix = new JButton[row][column];
 		setLayout(new BorderLayout());
 
@@ -83,14 +82,16 @@ public class GameScreen extends JPanel {
 		btnColor.setBackground(nextColor);
 	}
 
-	public void isWinner(boolean value) {
-		if (value) {
-			String name = JOptionPane.showInputDialog("¡Felicitaciones, has ganado!\nIngresa tu nombre:");
+	public void isWinner() {
+		namePlayer = JOptionPane.showInputDialog("¡Felicitaciones, has ganado!\nIngresa tu nombre:");
 
-			while (name.trim().isEmpty()) {
-				name = JOptionPane.showInputDialog("Por favor, debe ingresar su nombre:");
-			}
+		while (namePlayer.trim().isEmpty()) {
+			namePlayer = JOptionPane.showInputDialog("Por favor, debe ingresar su nombre:");
 		}
+	}
+
+	public String getNamePlayer() {
+		return namePlayer;
 	}
 
 	public void updateMatrix(java.util.List<Button> list) {
@@ -102,10 +103,6 @@ public class GameScreen extends JPanel {
 
 			btnsMatrix[x][y].setActionCommand(Integer.toString(buttonId));
 			btnsMatrix[x][y].setBackground(button.getColor());
-//			btnsMatrix[x][y].setText("<html>Id: " + buttonId + "<br>" + button.getPair().toString() + "</html>");
-
-			btnsMatrix[x][y].setBackground(button.getColor());
-
 		}
 
 		panelGrid.revalidate();
