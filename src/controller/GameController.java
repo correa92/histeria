@@ -31,7 +31,7 @@ public class GameController {
 		mainPanel = new JPanel(cardLayout);
 
 		mainMenu = new MainMenu();
-		gameScreen = new GameScreen(5, 5);
+		gameScreen = new GameScreen(5, 5, frame);
 		scoreScreen = new ScoreScreen();
 		matrixService = new MatrixService(5, 5);
 
@@ -48,7 +48,7 @@ public class GameController {
 	private void setupListeners() {
 
 		mainMenu.addPlayListener(e -> {
-			matrixService.Init();
+			matrixService.init();
 
 			gameScreen.setButtonMatrix(matrixService.getMatrix());
 			cardLayout.show(mainPanel, "Juego");
@@ -86,6 +86,12 @@ public class GameController {
 	private void handleButtonClick(int buttonId) {
 		try {
 			gameScreen.updateMatrix(matrixService.getButtonAndAdjancents(buttonId));
+			
+			if (matrixService.isWinner()) {
+				gameScreen.isWinner(matrixService.isWinner());
+//				gameScreen.setButtonMatrix(matrixService.getMatrix());	reinicia todo pero tambien saca ventana emergente			
+			}
+			gameScreen.updateNextColor(matrixService.getNextColor());
 			gameScreen.updateScore(matrixService.getScore());
 		} catch (Exception e) {
 			e.printStackTrace();

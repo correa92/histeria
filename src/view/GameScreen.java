@@ -2,36 +2,39 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import model.entity.Button;
 
 public class GameScreen extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JButton btnBack, btnAux;
-	private JLabel lblGame, lblScore;
+	private JButton btnBack, btnAux, btnColor;
+	private JLabel lblScore;
 	private JPanel panelGrid;
 	private JButton[][] btnsMatrix;
 	private int score = 0;
+	private JFrame _frame;
 
-	public GameScreen(int row, int column) {
+	public GameScreen(int row, int column, JFrame frame) {
 
+		_frame = frame;
 		btnsMatrix = new JButton[row][column];
 		setLayout(new BorderLayout());
 
-		lblScore = new JLabel("MOVIMIENTOS: " + score, SwingConstants.CENTER);
+		lblScore = new JLabel("Puntos: " + score, SwingConstants.CENTER);
 		lblScore.setFont(new Font("Arial", Font.BOLD, 20));
-
-		lblGame = new JLabel("¡Felicitaciones! Haz ganado con X movimientos.", SwingConstants.CENTER);
-		lblGame.setFont(new Font("Arial", Font.BOLD, 20));
-		lblGame.setVisible(false);
 
 		btnBack = new JButton("Volver al Menú");
 
+		btnColor = new JButton("Ayuda");
+		btnColor.setBounds(50, 50, 50, 50);
+
 		JPanel panelTop = new JPanel();
 		panelTop.setLayout(new BorderLayout());
-		panelTop.add(lblScore, BorderLayout.NORTH);
-		panelTop.add(lblGame, BorderLayout.CENTER);
+		panelTop.add(btnColor, BorderLayout.EAST);
+		panelTop.add(lblScore, BorderLayout.WEST);
 
 		add(panelTop, BorderLayout.NORTH);
 		add(btnBack, BorderLayout.SOUTH);
@@ -57,7 +60,7 @@ public class GameScreen extends JPanel {
 				int buttonId = currentButton.getId();
 				btnAux.setActionCommand(Integer.toString(buttonId));
 				btnAux.setBackground(currentButton.getColor());
-				btnAux.setText("<html>Id: " + buttonId + "<br>" + currentButton.getPair().toString() + "</html>");
+//				btnAux.setText("<html>Id: " + buttonId + "<br>" + currentButton.getPair().toString() + "</html>");
 
 				btnsMatrix[j][i] = btnAux;
 				panelGrid.add(btnAux);
@@ -73,7 +76,21 @@ public class GameScreen extends JPanel {
 	}
 
 	public void updateScore(int score) {
-		lblScore.setText("MOVIMIENTOS: " + score);
+		lblScore.setText("Puntos: " + score);
+	}
+
+	public void updateNextColor(Color nextColor) {
+		btnColor.setBackground(nextColor);
+	}
+
+	public void isWinner(boolean value) {
+		if (value) {
+			String name = JOptionPane.showInputDialog("¡Felicitaciones, has ganado!\nIngresa tu nombre:");
+
+			while (name.trim().isEmpty()) {
+				name = JOptionPane.showInputDialog("Por favor, debe ingresar su nombre:");
+			}
+		}
 	}
 
 	public void updateMatrix(java.util.List<Button> list) {
@@ -85,7 +102,7 @@ public class GameScreen extends JPanel {
 
 			btnsMatrix[x][y].setActionCommand(Integer.toString(buttonId));
 			btnsMatrix[x][y].setBackground(button.getColor());
-			btnsMatrix[x][y].setText("<html>Id: " + buttonId + "<br>" + button.getPair().toString() + "</html>");
+//			btnsMatrix[x][y].setText("<html>Id: " + buttonId + "<br>" + button.getPair().toString() + "</html>");
 
 			btnsMatrix[x][y].setBackground(button.getColor());
 

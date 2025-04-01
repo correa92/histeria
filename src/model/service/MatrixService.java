@@ -23,7 +23,6 @@ public class MatrixService {
 	private ScoreService _scoreService = new ScoreService();
 	private Color nextColor;
 
-
 	private Color[] listColorsDefault = new Color[] { new Color(197, 108, 240), new Color(50, 255, 126),
 			new Color(255, 56, 56), new Color(255, 159, 26), new Color(255, 242, 0), new Color(24, 220, 255) };
 
@@ -41,13 +40,12 @@ public class MatrixService {
 		nextColor = colorRandom();
 	}
 
-	public void Init() {
+	public void init() {
 
 		try {
 			createMatrixAndDictionary();
 			AssignAdjacents();
 
-			resetData();
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e);
@@ -56,6 +54,10 @@ public class MatrixService {
 
 	public int getScore() {
 		return _scoreService.getScore();
+	}
+	
+	public Color getNextColor() {
+		return nextColor;
 	}
 
 	public List<Score> getListScore() {
@@ -78,9 +80,9 @@ public class MatrixService {
 
 		if (id < 0 || id >= this.buttons.size())
 			throw new Exception("El id no es válido.");
-
+		
 		List<Button> list = new ArrayList<>();
-
+		
 		compareButtonWithAdjacent(buttons.get(id));
 		list.add(buttons.get(id));
 
@@ -315,6 +317,18 @@ public class MatrixService {
 		}
 	}
 
+	public boolean isWinner() {
+		for (Button btn : buttons.values()) {
+			if (btn.getColor().equals(colorDefault))
+				return false;
+		}
+		_scoreService.saveUserAndScore();
+		_scoreService.resetScore();
+		resetData();
+		resetMatrix();
+		return true;
+	}
+
 	private Color colorRandom() {
 
 		int min = 0, max = listColorsDefault.length - 1;
@@ -322,6 +336,12 @@ public class MatrixService {
 		Random random = new Random();
 		randomNumber = random.nextInt(max - min + 1) + min;
 		return listColorsDefault[randomNumber];
+	}
+	
+	private void resetMatrix() {
+		for (Button btn : buttons.values()) {
+			btn.setColor(colorDefault);
+		}
 	}
 
 	private void resetData() {
