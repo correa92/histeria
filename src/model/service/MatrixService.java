@@ -1,7 +1,6 @@
 package model.service;
 
 import java.awt.Color;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,8 +10,11 @@ import java.util.Random;
 import java.util.Set;
 
 import model.entity.*;
+import model.service.interfaces.ICondition;
+import model.service.interfaces.IScore;
+import model.service.interfaces.ITraversesMatrix;
 
-public class MatrixService {
+public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 	private int row = 5;
 	private int column = 5;
 	private int[][] matrix;
@@ -98,6 +100,21 @@ public class MatrixService {
 		return matrixButtons;
 	}
 
+	public boolean isWinner() {
+		for (Button btn : buttons.values()) {
+			if (btn.getColor().equals(colorDefault))
+				return false;
+		}
+		return true;
+	}
+	
+	public void endGame(String namePlayer) {
+		_scoreService.saveUserAndScore(namePlayer);
+		_scoreService.resetScore();
+		resetData();
+		resetMatrix();
+	}
+	
 	private void createMatrixAndDictionary() {
 		for (int i = 0; i < column; i++) {
 			for (int j = 0; j < row; j++) {
@@ -307,21 +324,6 @@ public class MatrixService {
 				listAdjacentsAux.add(matrix[i][j]);
 			}
 		}
-	}
-
-	public boolean isWinner() {
-		for (Button btn : buttons.values()) {
-			if (btn.getColor().equals(colorDefault))
-				return false;
-		}
-		return true;
-	}
-	
-	public void endGame(String namePlayer) {
-		_scoreService.saveUserAndScore(namePlayer);
-		_scoreService.resetScore();
-		resetData();
-		resetMatrix();
 	}
 
 	private Color colorRandom() {
