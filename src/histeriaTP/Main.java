@@ -5,7 +5,11 @@ import controller.GameController;
 public class Main {
 
 	public static void main(String[] args) {
-		new GameController();
+		try {
+			new GameController();			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 }

@@ -10,6 +10,7 @@ import model.service.MatrixService;
 import model.service.ScoreService;
 
 import java.awt.*;
+import java.io.IOException;
 
 public class GameController {
 	private JFrame frame;
@@ -45,13 +46,9 @@ public class GameController {
 	}
 
 	private void setupListeners() {
-		try {
 
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 		mainMenu.addPlayListener(e -> {
-			matrixService.Init();
+			matrixService.init();
 
 			gameScreen.setButtonMatrix(matrixService.getMatrix());
 			cardLayout.show(mainPanel, "Juego");
@@ -62,7 +59,6 @@ public class GameController {
 				for (int j = 0; j < buttons[i].length; j++) {
 
 					int buttonId = Integer.parseInt(buttons[i][j].getActionCommand());
-
 					buttons[i][j].addActionListener(event -> handleButtonClick(buttonId));
 				}
 			}
@@ -82,13 +78,24 @@ public class GameController {
 			cardLayout.show(mainPanel, "Menu");
 		});
 
-		scoreScreen.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
+		scoreScreen.addBackListener(e -> {
+			cardLayout.show(mainPanel, "Menu");
+		});
 	}
 
 	private void handleButtonClick(int buttonId) {
 		try {
 			gameScreen.updateMatrix(matrixService.getButtonAndAdjancents(buttonId));
+			
+			if (matrixService.isWinner()) {
+				gameScreen.isWinner();
+				matrixService.endGame(gameScreen.getNamePlayer()); 
+				cardLayout.show(mainPanel, "Menu");
+			};
+
+			gameScreen.updateNextColor(matrixService.getNextColor());
 			gameScreen.updateScore(matrixService.getScore());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
