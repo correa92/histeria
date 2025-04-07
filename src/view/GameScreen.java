@@ -35,10 +35,11 @@ public class GameScreen extends JPanel {
 		btnBack.setFocusPainted(false);
 		btnBack.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-		btnHelp = new JButton("Ayuda");
+		btnHelp = new JButton();
 		btnHelp.setBounds(50, 50, 50, 50);
 		btnHelp.setBackground(colorDefault);
-
+		btnHelp.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+		
 		panelTop = new JPanel();
 		panelTop.setLayout(new BorderLayout());
 		panelTop.add(btnHelp, BorderLayout.EAST);
@@ -87,6 +88,10 @@ public class GameScreen extends JPanel {
 
 	public void updateScore(int score) {
 		lblScore.setText("Puntos: " + score);
+	}
+	
+	public void updateQtyHelp(int qtyHelp) {
+		btnHelp.setText("Ayuda: " + qtyHelp);
 	}
 
 	public void updateNextColor(Color nextColor) {
