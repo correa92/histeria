@@ -3,10 +3,12 @@ package controller;
 import view.MainMenu;
 import view.ScoreScreen;
 import view.GameScreen;
+import view.Instrucciones;
 
 import javax.swing.*;
 
 import model.service.MatrixService;
+
 
 import java.awt.*;
 
@@ -16,7 +18,9 @@ public class GameController {
 	private JPanel mainPanel;
 	private MainMenu mainMenu;
 	private GameScreen gameScreen;
+	private Instrucciones instrucciones;
 	private ScoreScreen scoreScreen;
+
 	private MatrixService matrixService;
 	private int fixedGrid = 5;
 
@@ -33,10 +37,12 @@ public class GameController {
 		gameScreen = new GameScreen(fixedGrid);
 		scoreScreen = new ScoreScreen();
 		matrixService = new MatrixService(fixedGrid);
+		instrucciones = new Instrucciones();
 
 		mainPanel.add(mainMenu, "Menu");
 		mainPanel.add(gameScreen, "Juego");
 		mainPanel.add(scoreScreen, "Puntajes");
+		mainPanel.add(instrucciones, "Instrucciones");
 
 		frame.add(mainPanel);
 		frame.setVisible(true);
@@ -68,6 +74,10 @@ public class GameController {
 			scoreScreen.updateScores(matrixService.getListScore());
 			cardLayout.show(mainPanel, "Puntajes");
 		});
+		
+		mainMenu.addInstruccionesListener(e -> {
+		    cardLayout.show(mainPanel, "Instrucciones");
+		});
 
 		mainMenu.addExitListener(e -> System.exit(0));
 
@@ -85,6 +95,10 @@ public class GameController {
 
 		scoreScreen.addBackListener(e -> {
 			cardLayout.show(mainPanel, "Menu");
+		});
+		
+		instrucciones.addBackListener(e -> {
+		    cardLayout.show(mainPanel, "Menu");
 		});
 	}
 
