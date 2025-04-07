@@ -40,4 +40,8 @@ public class ScoreScreen extends JPanel {
         for (Score score : scores) {
         }
     }
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(600, 500); 
+    }
 }
