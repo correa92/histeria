@@ -15,7 +15,7 @@ import model.service.interfaces.IScore;
 import model.service.interfaces.ITraversesMatrix;
 
 public class MatrixService implements ITraversesMatrix, IScore, ICondition {
-	private int row, column, id;
+	private int row, column, id, qtyHelp = 3;
 	private int[][] matrix;
 	private Set<Integer> listAdjacentsAux;
 	private Map<Integer, Button> buttons;
@@ -26,8 +26,7 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 			new Color(255, 56, 56), new Color(255, 159, 26), new Color(255, 242, 0), new Color(24, 220, 255) };
 
 	/**
-	 * @param row
-	 * @param column
+	 * @param fixedGrid
 	 */
 	public MatrixService(int fixedGrid) {
 		super();
@@ -54,19 +53,29 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 	public int getScore() {
 		return _scoreService.getScore();
 	}
+	
+	public int getQtyHelp() {
+		return this.qtyHelp;
+	}
 
 	public Color getNextColor() {
-		return nextColor;
+		if (qtyHelp > 0) {
+			qtyHelp--;
+			return nextColor;			
+		}
+			
+		return colorDefault;
 	}
 
 	public List<Score> getListScore() {
 		return _scoreService.getScores();
 	}
 
-	public void resetScore() {
+	public void resetScoreAndHelp() {
 		_scoreService.resetScore();
+		qtyHelp = 3;
 	}
-
+	
 	public List<Button> getButtonAndAdjancents(int id) throws Exception {
 
 		if (id < 0 || id >= this.buttons.size())
@@ -340,6 +349,7 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 
 	private void resetData() {
 		this.id = 0;
+		this.qtyHelp = 3;
 	}
 
 }

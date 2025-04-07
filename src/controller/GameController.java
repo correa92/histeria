@@ -48,7 +48,7 @@ public class GameController {
 
 		mainMenu.addPlayListener(e -> {
 			matrixService.init();
-
+			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
 			gameScreen.setButtonMatrix(matrixService.getMatrix());
 			cardLayout.show(mainPanel, "Juego");
 
@@ -63,20 +63,22 @@ public class GameController {
 			}
 
 		});
-		
+
 		mainMenu.addScoresListener(e -> {
 			scoreScreen.updateScores(matrixService.getListScore());
 			cardLayout.show(mainPanel, "Puntajes");
 		});
 
 		mainMenu.addExitListener(e -> System.exit(0));
-		
-		gameScreen.getButtonHelp().addActionListener(e-> { 
+
+		gameScreen.getButtonHelp().addActionListener(e -> {
+			gameScreen.updateNextColor(matrixService.getNextColor());
+			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
 			gameScreen.activeHelp();
-			});
+		});
 
 		gameScreen.addBackListener(e -> {
-			matrixService.resetScore();
+			matrixService.resetScoreAndHelp();
 			gameScreen.updateScore(matrixService.getScore());
 			cardLayout.show(mainPanel, "Menu");
 		});
@@ -96,9 +98,8 @@ public class GameController {
 				cardLayout.show(mainPanel, "Menu");
 			}
 			;
-
-			gameScreen.updateNextColor(matrixService.getNextColor());
 			gameScreen.updateScore(matrixService.getScore());
+			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -6,6 +6,7 @@ import model.entity.Score;
 
 public interface IScore {
 	int getScore();
-	void resetScore();
+	void resetScoreAndHelp();
 	List<Score> getListScore();
+	int getQtyHelp();
 }
