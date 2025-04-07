@@ -15,15 +15,12 @@ import model.service.interfaces.IScore;
 import model.service.interfaces.ITraversesMatrix;
 
 public class MatrixService implements ITraversesMatrix, IScore, ICondition {
-	private int row = 5;
-	private int column = 5;
+	private int row, column, id;
 	private int[][] matrix;
-	private int id;
 	private Set<Integer> listAdjacentsAux;
 	private Map<Integer, Button> buttons;
-	private Color colorDefault = new Color(200, 200, 200);
+	private Color nextColor, colorDefault = new Color(200, 200, 200);
 	private ScoreService _scoreService = new ScoreService();
-	private Color nextColor;
 
 	private Color[] listColorsDefault = new Color[] { new Color(197, 108, 240), new Color(50, 255, 126),
 			new Color(255, 56, 56), new Color(255, 159, 26), new Color(255, 242, 0), new Color(24, 220, 255) };
@@ -32,11 +29,11 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 	 * @param row
 	 * @param column
 	 */
-	public MatrixService(int row, int column) {
+	public MatrixService(int fixedGrid) {
 		super();
-		this.row = row;
-		this.column = column;
-		matrix = new int[row][column];
+		this.row = fixedGrid;
+		this.column = fixedGrid;
+		matrix = new int[fixedGrid][fixedGrid];
 		buttons = new HashMap<>();
 		listAdjacentsAux = new HashSet<>();
 		nextColor = colorRandom();
@@ -57,7 +54,7 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 	public int getScore() {
 		return _scoreService.getScore();
 	}
-	
+
 	public Color getNextColor() {
 		return nextColor;
 	}
@@ -74,9 +71,9 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 
 		if (id < 0 || id >= this.buttons.size())
 			throw new Exception("El id no es válido.");
-		
+
 		List<Button> list = new ArrayList<>();
-		
+
 		compareButtonWithAdjacent(buttons.get(id));
 		list.add(buttons.get(id));
 
@@ -107,14 +104,14 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 		}
 		return true;
 	}
-	
+
 	public void endGame(String namePlayer) {
 		_scoreService.saveUserAndScore(namePlayer);
 		_scoreService.resetScore();
 		resetData();
 		resetMatrix();
 	}
-	
+
 	private void createMatrixAndDictionary() {
 		for (int i = 0; i < column; i++) {
 			for (int j = 0; j < row; j++) {
@@ -334,7 +331,7 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 		randomNumber = random.nextInt(max - min + 1) + min;
 		return listColorsDefault[randomNumber];
 	}
-	
+
 	private void resetMatrix() {
 		for (Button btn : buttons.values()) {
 			btn.setColor(colorDefault);

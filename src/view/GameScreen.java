@@ -1,8 +1,9 @@
 package view;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import model.entity.Button;
@@ -10,38 +11,48 @@ import model.entity.Button;
 public class GameScreen extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JButton btnBack, btnAux, btnColor;
+	private JButton btnBack, btnAux, btnHelp;
 	private JLabel lblScore;
-	private JPanel panelGrid;
+	private JPanel panelGrid, panelTop, btnPanel;
 	private JButton[][] btnsMatrix;
 	private int score = 0;
 	private String namePlayer;
+	private Color nextColor, colorDefault = new Color(220, 220, 220);
 
-	public GameScreen(int row, int column) {
+	public GameScreen(int fixedGrid) {
 
-		btnsMatrix = new JButton[row][column];
+		btnsMatrix = new JButton[fixedGrid][fixedGrid];
 		setLayout(new BorderLayout());
 
 		lblScore = new JLabel("Puntos: " + score, SwingConstants.CENTER);
 		lblScore.setFont(new Font("Arial", Font.BOLD, 20));
+		lblScore.setBorder(new EmptyBorder(10, 20, 10, 20));
 
 		btnBack = new JButton("Volver al Menú");
+		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
+		btnBack.setBackground(new Color(100, 149, 237));
+		btnBack.setForeground(Color.WHITE);
+		btnBack.setFocusPainted(false);
+		btnBack.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-		btnColor = new JButton("Ayuda");
-		btnColor.setBounds(50, 50, 50, 50);
+		btnHelp = new JButton("Ayuda");
+		btnHelp.setBounds(50, 50, 50, 50);
+		btnHelp.setBackground(colorDefault);
 
-		JPanel panelTop = new JPanel();
+		panelTop = new JPanel();
 		panelTop.setLayout(new BorderLayout());
-		panelTop.add(btnColor, BorderLayout.EAST);
+		panelTop.add(btnHelp, BorderLayout.EAST);
 		panelTop.add(lblScore, BorderLayout.WEST);
-
 		add(panelTop, BorderLayout.NORTH);
-		add(btnBack, BorderLayout.SOUTH);
 
 		panelGrid = new JPanel();
-		panelGrid.setLayout(new GridLayout(row, column, 0, 0));
-
+		panelGrid.setLayout(new GridLayout(fixedGrid, fixedGrid, 0, 0));
 		add(panelGrid, BorderLayout.CENTER);
+
+		btnPanel = new JPanel();
+		btnPanel.setBackground(getBackground());
+		btnPanel.add(btnBack);
+		add(btnPanel, BorderLayout.SOUTH);
 	}
 
 	public void addBackListener(ActionListener listener) {
@@ -79,7 +90,15 @@ public class GameScreen extends JPanel {
 	}
 
 	public void updateNextColor(Color nextColor) {
-		btnColor.setBackground(nextColor);
+		this.nextColor = nextColor;
+	}
+	
+	public JButton getButtonHelp() {
+		return btnHelp;
+	}
+	
+	public void activeHelp() {
+		btnHelp.setBackground(nextColor);
 	}
 
 	public void isWinner() {
@@ -95,7 +114,8 @@ public class GameScreen extends JPanel {
 	}
 
 	public void updateMatrix(java.util.List<Button> list) {
-
+		btnHelp.setBackground(colorDefault);
+		
 		for (Button button : list) {
 			int buttonId = button.getId();
 			int x = button.getPair().getX();

@@ -7,10 +7,8 @@ import view.GameScreen;
 import javax.swing.*;
 
 import model.service.MatrixService;
-import model.service.ScoreService;
 
 import java.awt.*;
-import java.io.IOException;
 
 public class GameController {
 	private JFrame frame;
@@ -20,6 +18,7 @@ public class GameController {
 	private GameScreen gameScreen;
 	private ScoreScreen scoreScreen;
 	private MatrixService matrixService;
+	private int fixedGrid = 5;
 
 	public GameController() {
 		frame = new JFrame("Juego en Java");
@@ -31,9 +30,9 @@ public class GameController {
 		mainPanel = new JPanel(cardLayout);
 
 		mainMenu = new MainMenu();
-		gameScreen = new GameScreen(5, 5);
+		gameScreen = new GameScreen(fixedGrid);
 		scoreScreen = new ScoreScreen();
-		matrixService = new MatrixService(5, 5);
+		matrixService = new MatrixService(fixedGrid);
 
 		mainPanel.add(mainMenu, "Menu");
 		mainPanel.add(gameScreen, "Juego");
@@ -64,13 +63,17 @@ public class GameController {
 			}
 
 		});
-
+		
 		mainMenu.addScoresListener(e -> {
 			scoreScreen.updateScores(matrixService.getListScore());
 			cardLayout.show(mainPanel, "Puntajes");
 		});
 
 		mainMenu.addExitListener(e -> System.exit(0));
+		
+		gameScreen.getButtonHelp().addActionListener(e-> { 
+			gameScreen.activeHelp();
+			});
 
 		gameScreen.addBackListener(e -> {
 			matrixService.resetScore();
@@ -86,16 +89,17 @@ public class GameController {
 	private void handleButtonClick(int buttonId) {
 		try {
 			gameScreen.updateMatrix(matrixService.getButtonAndAdjancents(buttonId));
-			
+
 			if (matrixService.isWinner()) {
 				gameScreen.isWinner();
-				matrixService.endGame(gameScreen.getNamePlayer()); 
+				matrixService.endGame(gameScreen.getNamePlayer());
 				cardLayout.show(mainPanel, "Menu");
-			};
+			}
+			;
 
 			gameScreen.updateNextColor(matrixService.getNextColor());
 			gameScreen.updateScore(matrixService.getScore());
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
