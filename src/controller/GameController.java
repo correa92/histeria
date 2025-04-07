@@ -18,6 +18,7 @@ public class GameController {
 	private GameScreen gameScreen;
 	private ScoreScreen scoreScreen;
 	private MatrixService matrixService;
+	private int fixedGrid = 5;
 
 	public GameController() {
 		frame = new JFrame("Juego en Java");
@@ -29,9 +30,9 @@ public class GameController {
 		mainPanel = new JPanel(cardLayout);
 
 		mainMenu = new MainMenu();
-		gameScreen = new GameScreen(5, 5);
+		gameScreen = new GameScreen(fixedGrid);
 		scoreScreen = new ScoreScreen();
-		matrixService = new MatrixService(5, 5);
+		matrixService = new MatrixService(fixedGrid);
 
 		mainPanel.add(mainMenu, "Menu");
 		mainPanel.add(gameScreen, "Juego");

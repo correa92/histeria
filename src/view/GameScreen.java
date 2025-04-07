@@ -19,9 +19,9 @@ public class GameScreen extends JPanel {
 	private String namePlayer;
 	private Color nextColor, colorDefault = new Color(220, 220, 220);
 
-	public GameScreen(int row, int column) {
+	public GameScreen(int fixedGrid) {
 
-		btnsMatrix = new JButton[row][column];
+		btnsMatrix = new JButton[fixedGrid][fixedGrid];
 		setLayout(new BorderLayout());
 
 		lblScore = new JLabel("Puntos: " + score, SwingConstants.CENTER);
@@ -46,7 +46,7 @@ public class GameScreen extends JPanel {
 		add(panelTop, BorderLayout.NORTH);
 
 		panelGrid = new JPanel();
-		panelGrid.setLayout(new GridLayout(row, column, 0, 0));
+		panelGrid.setLayout(new GridLayout(fixedGrid, fixedGrid, 0, 0));
 		add(panelGrid, BorderLayout.CENTER);
 
 		btnPanel = new JPanel();
