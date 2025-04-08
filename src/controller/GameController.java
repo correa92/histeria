@@ -8,8 +8,6 @@ import view.Instrucciones;
 import javax.swing.*;
 
 import model.service.MatrixService;
-
-
 import java.awt.*;
 
 public class GameController {
