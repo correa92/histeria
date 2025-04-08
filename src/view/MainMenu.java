@@ -11,12 +11,30 @@ public class MainMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JButton btnPlay, btnScores, btnExit, btnInstrucciones;
 	private Image backgroundImage;
+	private JButton btnEasy, btnMedium, btnHard;
+	
 
 	public MainMenu() {
 
 		backgroundImage = new ImageIcon(getClass().getResource("/images/fondo_juego.jpg")).getImage();
-
+        
+        btnEasy = new JButton("Nivel Fácil: 5x5");
+        btnMedium = new JButton("Nivel Medio: 7x7");
+        btnHard = new JButton("Nivel Difícil: 10x0");
+   
+        // Ocultar botones de dificultad al inicio
+        btnEasy.setVisible(false);
+        btnMedium.setVisible(false);
+        btnHard.setVisible(false);
+      
 		setLayout(null);
+    
+    // Método para mostrar los botones de dificultad cuando el usuario presiona "Jugar"
+    public void showDifficultyButtons() {
+        btnEasy.setVisible(true);
+        btnMedium.setVisible(true);
+        btnHard.setVisible(true);
+    }
 
 		btnPlay = new JButton("Jugar");
 		btnPlay.setBounds(152, 100, 268, 44);
@@ -69,4 +87,11 @@ public class MainMenu extends JPanel {
 		return new Dimension(600, 500);
 	}
 
+    public void addDifficultyListeners(ActionListener easy, ActionListener medium, ActionListener hard) {
+        btnEasy.addActionListener(easy);
+        btnMedium.addActionListener(medium);
+        btnHard.addActionListener(hard);
+    }
 }
+
+

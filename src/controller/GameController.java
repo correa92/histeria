@@ -2,8 +2,10 @@ package controller;
 
 import view.MainMenu;
 import view.ScoreScreen;
+import view.DifficultyScreen;
 import view.GameScreen;
 import view.Instrucciones;
+import model.service.MatrixService;
 
 import javax.swing.*;
 
@@ -18,7 +20,7 @@ public class GameController {
 	private GameScreen gameScreen;
 	private Instrucciones instrucciones;
 	private ScoreScreen scoreScreen;
-
+	private DifficultyScreen difficultyScreen;
 	private MatrixService matrixService;
 	private int fixedGrid = 5;
 
@@ -33,12 +35,13 @@ public class GameController {
 
 		mainMenu = new MainMenu();
 		gameScreen = new GameScreen(fixedGrid);
+		difficultyScreen = new DifficultyScreen();
 		scoreScreen = new ScoreScreen();
 		matrixService = new MatrixService(fixedGrid);
 		instrucciones = new Instrucciones();
 
 		mainPanel.add(mainMenu, "Menu");
-		mainPanel.add(gameScreen, "Juego");
+		mainPanel.add(difficultyScreen, "Dificultad");
 		mainPanel.add(scoreScreen, "Puntajes");
 		mainPanel.add(instrucciones, "Instrucciones");
 
@@ -49,25 +52,15 @@ public class GameController {
 	}
 
 	private void setupListeners() {
+		// Mostrar pantalla de selección de dificultad al presionar "Jugar"
+		mainMenu.addPlayListener(e -> cardLayout.show(mainPanel, "Dificultad"));
 
-		mainMenu.addPlayListener(e -> {
-			matrixService.init();
+		// Listeners para cada nivel de dificultad
+		difficultyScreen.addEasyListener(e -> startGame(5, 5));
+		difficultyScreen.addMediumListener(e -> startGame(7, 7));
+		difficultyScreen.addHardListener(e -> startGame(10, 10));
+		difficultyScreen.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
 			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
-			gameScreen.setButtonMatrix(matrixService.getMatrix());
-			cardLayout.show(mainPanel, "Juego");
-
-			JButton[][] buttons = gameScreen.getMatrix();
-
-			for (int i = 0; i < buttons.length; i++) {
-				for (int j = 0; j < buttons[i].length; j++) {
-
-					int buttonId = Integer.parseInt(buttons[i][j].getActionCommand());
-					buttons[i][j].addActionListener(event -> handleButtonClick(buttonId));
-				}
-			}
-
-		});
-
 		mainMenu.addScoresListener(e -> {
 			scoreScreen.updateScores(matrixService.getListScore());
 			cardLayout.show(mainPanel, "Puntajes");
@@ -85,13 +78,35 @@ public class GameController {
 			gameScreen.activeHelp();
 		});
 
+		scoreScreen.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
+	}
+
+	private void startGame(int rows, int cols) {
+		// Crear nueva matriz y pantalla de juego con el tamaño seleccionado
+		matrixService = new MatrixService(rows, cols);
+		gameScreen = new GameScreen(rows, cols);
+
+		// Agregar el nuevo gameScreen al panel principal
+		mainPanel.add(gameScreen, "Juego");
+		cardLayout.show(mainPanel, "Juego");
+
+		// Inicializar la matriz
+		matrixService.init();
+		gameScreen.setButtonMatrix(matrixService.getMatrix());
+
+		// Asignar listeners a los botones
+		JButton[][] buttons = gameScreen.getMatrix();
+		for (int i = 0; i < buttons.length; i++) {
+			for (int j = 0; j < buttons[i].length; j++) {
+				int buttonId = Integer.parseInt(buttons[i][j].getActionCommand());
+				buttons[i][j].addActionListener(event -> handleButtonClick(buttonId));
+			}
+		}
+
+		// Listener para volver al menú desde el juego
 		gameScreen.addBackListener(e -> {
 			matrixService.resetScoreAndHelp();
 			gameScreen.updateScore(matrixService.getScore());
-			cardLayout.show(mainPanel, "Menu");
-		});
-
-		scoreScreen.addBackListener(e -> {
 			cardLayout.show(mainPanel, "Menu");
 		});
 		
@@ -113,9 +128,10 @@ public class GameController {
 			gameScreen.updateScore(matrixService.getScore());
 			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
 
+			gameScreen.updateNextColor(matrixService.getNextColor());
+			gameScreen.updateScore(matrixService.getScore());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }
