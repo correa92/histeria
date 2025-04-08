@@ -73,5 +73,9 @@ public class ScoreScreen extends JPanel {
             tableModel.addRow(row);
         }
     }
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(600, 500); 
+    }
 }
 
