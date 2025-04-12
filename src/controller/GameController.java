@@ -52,13 +52,13 @@ public class GameController {
 	}
 
 	private void setupListeners() {
-		// Mostrar pantalla de selección de dificultad al presionar "Jugar"
+		// Mostrar pantalla de selecciï¿½n de dificultad al presionar "Jugar"
 		mainMenu.addPlayListener(e -> cardLayout.show(mainPanel, "Dificultad"));
 
 		// Listeners para cada nivel de dificultad
-		difficultyScreen.addEasyListener(e -> startGame(5, 5));
-		difficultyScreen.addMediumListener(e -> startGame(7, 7));
-		difficultyScreen.addHardListener(e -> startGame(10, 10));
+		difficultyScreen.addEasyListener(e -> startGame(5));
+		difficultyScreen.addMediumListener(e -> startGame(7));
+		difficultyScreen.addHardListener(e -> startGame(10));
 		difficultyScreen.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
 			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
 		mainMenu.addScoresListener(e -> {
@@ -81,10 +81,10 @@ public class GameController {
 		scoreScreen.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
 	}
 
-	private void startGame(int rows, int cols) {
-		// Crear nueva matriz y pantalla de juego con el tamaño seleccionado
-		matrixService = new MatrixService(rows, cols);
-		gameScreen = new GameScreen(rows, cols);
+	private void startGame(int rows) {
+		// Crear nueva matriz y pantalla de juego con el tamaï¿½o seleccionado
+		matrixService = new MatrixService(rows); //ver
+		gameScreen = new GameScreen(rows);       //ver
 
 		// Agregar el nuevo gameScreen al panel principal
 		mainPanel.add(gameScreen, "Juego");
@@ -103,7 +103,7 @@ public class GameController {
 			}
 		}
 
-		// Listener para volver al menú desde el juego
+		// Listener para volver al menï¿½ desde el juego
 		gameScreen.addBackListener(e -> {
 			matrixService.resetScoreAndHelp();
 			gameScreen.updateScore(matrixService.getScore());
