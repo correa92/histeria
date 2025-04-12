@@ -10,11 +10,11 @@ public class MainMenu extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JButton btnPlay, btnScores, btnExit, btnInstrucciones;
-	private Image backgroundImage;
+//	private Image backgroundImage;
 
 	public MainMenu() {
 
-		backgroundImage = new ImageIcon(getClass().getResource("/images/fondo_juego.jpg")).getImage();
+//		backgroundImage = new ImageIcon(getClass().getResource("/images/fondo_juego.jpg")).getImage();
 
 		setLayout(null);
 
@@ -55,14 +55,14 @@ public class MainMenu extends JPanel {
 	public void addExitListener(ActionListener listener) {
 		btnExit.addActionListener(listener);
 	}
-
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		if (backgroundImage != null) {
-			g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-		}
-	}
+//
+//	@Override
+//	protected void paintComponent(Graphics g) {
+//		super.paintComponent(g);
+//		if (backgroundImage != null) {
+//			g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+//		}
+//	}
 
 	@Override
 	public Dimension getPreferredSize() {
