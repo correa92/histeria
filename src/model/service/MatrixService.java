@@ -53,7 +53,7 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 	public int getScore() {
 		return _scoreService.getScore();
 	}
-	
+
 	public int getQtyHelp() {
 		return this.qtyHelp;
 	}
@@ -61,21 +61,21 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 	public Color getNextColor() {
 		if (qtyHelp > 0) {
 			qtyHelp--;
-			return nextColor;			
+			return nextColor;
 		}
-			
+
 		return colorDefault;
 	}
-
-	public List<Score> getListScore() {
-		return _scoreService.getScores();
+	
+	public Color getNextColorModeTest() {
+		return nextColor;
 	}
 
 	public void resetScoreAndHelp() {
 		_scoreService.resetScore();
 		qtyHelp = 3;
 	}
-	
+
 	public List<Button> getButtonAndAdjancents(int id) throws Exception {
 
 		if (id < 0 || id >= this.buttons.size())

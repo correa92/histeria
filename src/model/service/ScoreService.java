@@ -69,7 +69,6 @@ public class ScoreService {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(pathRelative + "/scores.txt", true))) {
 			writer.write(currentUser.getPlayerName() + "," + currentUser.getPoints() + "\n");
 		}
-
 	}
 
 	public void loadScores() throws IOException {

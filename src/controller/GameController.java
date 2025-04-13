@@ -5,10 +5,10 @@ import view.ScoreScreen;
 import view.GameScreen;
 import view.Instructions;
 import view.DifficultyScreen;
-
 import javax.swing.*;
-
 import model.service.MatrixService;
+import model.service.ScoreService;
+
 import java.awt.*;
 
 public class GameController {
@@ -20,9 +20,10 @@ public class GameController {
 	private Instructions instrucciones;
 	private ScoreScreen scoreScreen;
 	private DifficultyScreen difficultyScreen;
-
+	private ScoreService scoreService;
 	private MatrixService matrixService;
-	private int fixedGrid = 5;
+
+	private boolean modeTest = true;
 
 	public GameController() {
 		frame = new JFrame("Juego en Java");
@@ -34,15 +35,13 @@ public class GameController {
 		mainPanel = new JPanel(cardLayout);
 
 		mainMenu = new MainMenu();
-		gameScreen = new GameScreen(fixedGrid);
 		difficultyScreen = new DifficultyScreen();
 		scoreScreen = new ScoreScreen();
-		matrixService = new MatrixService(fixedGrid);
 		instrucciones = new Instructions();
+		scoreService = new ScoreService();
 
 		mainPanel.add(mainMenu, "Menu");
-		mainPanel.add(difficultyScreen,"Dificultad");
-		mainPanel.add(gameScreen, "Juego");
+		mainPanel.add(difficultyScreen, "Dificultad");
 		mainPanel.add(scoreScreen, "Puntajes");
 		mainPanel.add(instrucciones, "Instrucciones");
 
@@ -53,86 +52,53 @@ public class GameController {
 	}
 
 	private void setupListeners() {
-		mainMenu.addPlayListener(e -> {
-			 cardLayout.show(mainPanel, "Dificultad");
+		mainMenu.addPlayListener(e -> cardLayout.show(mainPanel, "Dificultad"));
 
-		});
-		
 		mainMenu.addScoresListener(e -> {
-			scoreScreen.updateScores(matrixService.getListScore());
+			scoreScreen.updateScores(scoreService.getScores());
 			cardLayout.show(mainPanel, "Puntajes");
-		});		
-		mainMenu.addInstruccionesListener(e -> {
-		    cardLayout.show(mainPanel, "Instrucciones");
 		});
 
-		
+		mainMenu.addInstruccionesListener(e -> cardLayout.show(mainPanel, "Instrucciones"));
+
+		difficultyScreen.addEasyListener(e -> {
+			selectLevel(5);
+			startGame();
+		});
+
+		difficultyScreen.addMediumListener(e -> {
+			selectLevel(7);
+			startGame();
+		});
+
+		difficultyScreen.addHardListener(e -> {
+			selectLevel(10);
+			startGame();
+		});
+
 		mainMenu.addExitListener(e -> System.exit(0));
 
-		gameScreen.getButtonHelp().addActionListener(e -> {
-			gameScreen.updateNextColor(matrixService.getNextColor());
-			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
-			gameScreen.activeHelp();
-		});
-
-		gameScreen.addBackListener(e -> {
-			matrixService.resetScoreAndHelp();
-			gameScreen.updateScore(matrixService.getScore());
-			cardLayout.show(mainPanel, "Menu");
-		});
-
-		scoreScreen.addBackListener(e -> {
-			cardLayout.show(mainPanel, "Menu");
-		});
-		
-		instrucciones.addBackListener(e -> {
-		    cardLayout.show(mainPanel, "Menu");
-		});
-		
-		difficultyScreen.addEasyListener(e -> startGameWithDifficulty(5));
-		difficultyScreen.addMediumListener(e -> startGameWithDifficulty(7));
-		difficultyScreen.addHardListener(e -> startGameWithDifficulty(10));
-
-	
+		scoreScreen.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
+		instrucciones.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
 		difficultyScreen.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
-
 	}
-	
-	
-	
-	private void handleButtonClick(int buttonId) {
-		try {
-			gameScreen.updateMatrix(matrixService.getButtonAndAdjancents(buttonId));
 
-			if (matrixService.isWinner()) {
-				gameScreen.isWinner();
-				matrixService.endGame(gameScreen.getNamePlayer());
-				cardLayout.show(mainPanel, "Menu");
-			}
-			;
-			gameScreen.updateScore(matrixService.getScore());
-			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
+	private void selectLevel(int gridSize) {
+		if (gameScreen != null)
+			mainPanel.remove(gameScreen);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		matrixService = new MatrixService(gridSize);
+		gameScreen = new GameScreen(modeTest, gridSize);
+
+		mainPanel.add(gameScreen, "Juego");
 	}
-	private void startGameWithDifficulty(int gridSize) {
-		fixedGrid = gridSize;
-		
-		mainPanel.remove(gameScreen);
-		
-		matrixService = new MatrixService(fixedGrid);
-		gameScreen = new GameScreen(fixedGrid);
 
-		mainPanel.add(gameScreen, "Juego"); 
-		
+	private void startGame() {
 		matrixService.init();
-		
+
 		gameScreen.updateQtyHelp(matrixService.getQtyHelp());
 		gameScreen.setButtonMatrix(matrixService.getMatrix());
 
-		// Listeners de botones
 		JButton[][] buttons = gameScreen.getMatrix();
 		for (int i = 0; i < buttons.length; i++) {
 			for (int j = 0; j < buttons[i].length; j++) {
@@ -141,14 +107,12 @@ public class GameController {
 			}
 		}
 
-		// Listener botón ayuda
 		gameScreen.getButtonHelp().addActionListener(e -> {
 			gameScreen.updateNextColor(matrixService.getNextColor());
 			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
 			gameScreen.activeHelp();
 		});
 
-		// Listener botón volver
 		gameScreen.addBackListener(e -> {
 			matrixService.resetScoreAndHelp();
 			gameScreen.updateScore(matrixService.getScore());
@@ -158,4 +122,23 @@ public class GameController {
 		cardLayout.show(mainPanel, "Juego");
 	}
 
+	private void handleButtonClick(int buttonId) {
+		try {
+			gameScreen.updateMatrix(matrixService.getButtonAndAdjancents(buttonId));
+
+			if (matrixService.isWinner()) {
+				gameScreen.isWinner();
+				matrixService.endGame(gameScreen.getNamePlayer());
+				cardLayout.show(mainPanel, "Menu");
+			}
+			
+			if (modeTest) gameScreen.updateNextColor(matrixService.getNextColorModeTest());
+
+			gameScreen.updateScore(matrixService.getScore());
+			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
