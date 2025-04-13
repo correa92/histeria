@@ -9,14 +9,13 @@ public class DifficultyScreen extends JPanel {
 	    public DifficultyScreen() {
 
 	        btnEasy = new JButton("Fácil (5x5)");
-	        btnEasy.setBounds(40, 44, 338, 23);
 	        btnMedium = new JButton("Medio (7x7)");
-	        btnMedium.setBounds(70, 97, 308, 42);
 	        btnHard = new JButton("Difícil (10x10)");
-	        btnHard.setBounds(80, 175, 276, 23);
 	        btnBack = new JButton("Volver");
-	        btnBack.setBounds(40, 222, 360, 67);
-	        setLayout(null);
+	        btnBack.setBackground(new Color(255, 0, 0));
+
+	        setLayout(new GridLayout(4, 1, 0, 20));
+	        setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
 
 	        add(btnEasy);
 	        add(btnMedium);

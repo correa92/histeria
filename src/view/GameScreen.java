@@ -29,11 +29,7 @@ public class GameScreen extends JPanel {
 		lblScore.setBorder(new EmptyBorder(10, 20, 10, 20));
 
 		btnBack = new JButton("Volver al Menú");
-		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
-		btnBack.setBackground(new Color(100, 149, 237));
-		btnBack.setForeground(Color.WHITE);
-		btnBack.setFocusPainted(false);
-		btnBack.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        btnBack.setBackground(new Color(255, 0, 0));
 
 		btnHelp = new JButton();
 		btnHelp.setBounds(50, 50, 50, 50);
