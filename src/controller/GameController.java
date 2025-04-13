@@ -28,7 +28,7 @@ public class GameController {
 	public GameController() {
 		frame = new JFrame("Juego en Java");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(600, 600);
+		frame.setSize(700, 700);
 		frame.setLocationRelativeTo(null);
 
 		cardLayout = new CardLayout();

@@ -16,7 +16,7 @@ public class Pair {
 
 	@Override
 	public String toString() {
-		return "Par [x=" + x + ", y=" + y + "]";
+		return "[x=" + x + ", y=" + y + "]";
 	}
 
 	public int getX() {

@@ -82,7 +82,9 @@ public class GameScreen extends JPanel {
 				int buttonId = currentButton.getId();
 				btnAux.setActionCommand(Integer.toString(buttonId));
 				btnAux.setBackground(currentButton.getColor());
-//				btnAux.setText("<html>Id: " + buttonId + "<br>" + currentButton.getPair().toString() + "</html>");
+				btnAux.setFont(new Font("Arial", Font.BOLD, 24));
+				
+//				if (modeTest) btnAux.setText("<html>Id: " + buttonId + "<br>" + currentButton.getPair().toString() + "</html>");
 
 				btnsMatrix[j][i] = btnAux;
 				panelGrid.add(btnAux);
