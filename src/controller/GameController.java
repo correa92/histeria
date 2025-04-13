@@ -21,8 +21,9 @@ public class GameController {
 	private ScoreScreen scoreScreen;
 	private DifficultyScreen difficultyScreen;
 	private ScoreService scoreService;
-
 	private MatrixService matrixService;
+
+	private boolean modeTest = true;
 
 	public GameController() {
 		frame = new JFrame("Juego en Java");
@@ -87,7 +88,7 @@ public class GameController {
 			mainPanel.remove(gameScreen);
 
 		matrixService = new MatrixService(gridSize);
-		gameScreen = new GameScreen(gridSize);
+		gameScreen = new GameScreen(modeTest, gridSize);
 
 		mainPanel.add(gameScreen, "Juego");
 	}
@@ -130,9 +131,12 @@ public class GameController {
 				matrixService.endGame(gameScreen.getNamePlayer());
 				cardLayout.show(mainPanel, "Menu");
 			}
+			
+			if (modeTest) gameScreen.updateNextColor(matrixService.getNextColorModeTest());
 
 			gameScreen.updateScore(matrixService.getScore());
 			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

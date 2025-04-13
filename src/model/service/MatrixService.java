@@ -66,6 +66,10 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 
 		return colorDefault;
 	}
+	
+	public Color getNextColorModeTest() {
+		return nextColor;
+	}
 
 	public void resetScoreAndHelp() {
 		_scoreService.resetScore();

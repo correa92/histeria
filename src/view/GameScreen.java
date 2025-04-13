@@ -11,7 +11,7 @@ import model.entity.Button;
 public class GameScreen extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JButton btnBack, btnAux, btnHelp;
+	private JButton btnBack, btnAux, btnHelp, btnTest;
 	private JLabel lblScore;
 	private JPanel panelGrid, panelTop, btnPanel;
 	private JButton[][] btnsMatrix;
@@ -19,8 +19,12 @@ public class GameScreen extends JPanel {
 	private String namePlayer;
 	private Color nextColor, colorDefault = new Color(220, 220, 220);
 
-	public GameScreen(int fixedGrid) {
+	private boolean modeTest = false;
 
+	public GameScreen( boolean modeTest, int fixedGrid) {
+
+		this.modeTest = modeTest;
+		
 		btnsMatrix = new JButton[fixedGrid][fixedGrid];
 		setLayout(new BorderLayout());
 
@@ -29,21 +33,31 @@ public class GameScreen extends JPanel {
 		lblScore.setBorder(new EmptyBorder(10, 20, 10, 20));
 
 		btnBack = new JButton("Volver al Menú");
-        btnBack.setBackground(new Color(255, 0, 0));
+		btnBack.setBackground(new Color(255, 0, 0));
 
-		btnHelp = new JButton();
-		btnHelp.setBounds(50, 50, 50, 50);
+		btnHelp = new JButton("?");
 		btnHelp.setBackground(colorDefault);
 		btnHelp.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-		
-		panelTop = new JPanel();
-		panelTop.setLayout(new BorderLayout());
-		panelTop.add(btnHelp, BorderLayout.EAST);
+
+
+		JPanel rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+		rightButtonsPanel.setOpaque(false);
+
+		rightButtonsPanel.add(btnHelp);
+
+		if (this.modeTest) {
+			btnTest = new JButton("Test");
+			btnTest.setBackground(colorDefault);
+			btnTest.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+			rightButtonsPanel.add(btnTest);
+		}
+
+		panelTop = new JPanel(new BorderLayout());
 		panelTop.add(lblScore, BorderLayout.WEST);
+		panelTop.add(rightButtonsPanel, BorderLayout.EAST);
 		add(panelTop, BorderLayout.NORTH);
 
-		panelGrid = new JPanel();
-		panelGrid.setLayout(new GridLayout(fixedGrid, fixedGrid, 0, 0));
+		panelGrid = new JPanel(new GridLayout(fixedGrid, fixedGrid, 0, 0));
 		add(panelGrid, BorderLayout.CENTER);
 
 		btnPanel = new JPanel();
@@ -51,6 +65,7 @@ public class GameScreen extends JPanel {
 		btnPanel.add(btnBack);
 		add(btnPanel, BorderLayout.SOUTH);
 	}
+
 
 	public void addBackListener(ActionListener listener) {
 		btnBack.addActionListener(listener);
@@ -92,6 +107,7 @@ public class GameScreen extends JPanel {
 
 	public void updateNextColor(Color nextColor) {
 		this.nextColor = nextColor;
+		if (this.modeTest) btnTest.setBackground(this.nextColor);
 	}
 	
 	public JButton getButtonHelp() {
