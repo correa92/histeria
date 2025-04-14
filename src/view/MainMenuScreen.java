@@ -4,14 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class MainMenu extends JPanel {
-	/**
-	 * 
-	 */
+public class MainMenuScreen extends JPanel {
+
 	private static final long serialVersionUID = 1L;
 	private JButton btnPlay, btnScores, btnExit, btnInstrucciones;
 
-	public MainMenu() {
+	public MainMenuScreen() {
 
         setLayout(new GridLayout(4, 1, 0, 20));
         setBorder(BorderFactory.createEmptyBorder(60, 150, 60, 150));
