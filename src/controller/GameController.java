@@ -1,9 +1,9 @@
 package controller;
 
-import view.MainMenu;
+import view.MainMenuScreen;
 import view.ScoreScreen;
 import view.GameScreen;
-import view.Instructions;
+import view.InstructionsScreen;
 import view.DifficultyScreen;
 import javax.swing.*;
 import model.service.MatrixService;
@@ -15,9 +15,9 @@ public class GameController {
 	private JFrame frame;
 	private CardLayout cardLayout;
 	private JPanel mainPanel;
-	private MainMenu mainMenu;
+	private MainMenuScreen mainMenu;
 	private GameScreen gameScreen;
-	private Instructions instrucciones;
+	private InstructionsScreen instructionScreen;
 	private ScoreScreen scoreScreen;
 	private DifficultyScreen difficultyScreen;
 	private ScoreService scoreService;
@@ -28,22 +28,22 @@ public class GameController {
 	public GameController() {
 		frame = new JFrame("Juego en Java");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(700, 700);
+		frame.setSize(600, 600);
 		frame.setLocationRelativeTo(null);
 
 		cardLayout = new CardLayout();
 		mainPanel = new JPanel(cardLayout);
 
-		mainMenu = new MainMenu();
+		mainMenu = new MainMenuScreen();
 		difficultyScreen = new DifficultyScreen();
 		scoreScreen = new ScoreScreen();
-		instrucciones = new Instructions();
+		instructionScreen = new InstructionsScreen();
 		scoreService = new ScoreService();
 
 		mainPanel.add(mainMenu, "Menu");
 		mainPanel.add(difficultyScreen, "Dificultad");
 		mainPanel.add(scoreScreen, "Puntajes");
-		mainPanel.add(instrucciones, "Instrucciones");
+		mainPanel.add(instructionScreen, "Instrucciones");
 
 		frame.add(mainPanel);
 		frame.setVisible(true);
@@ -79,7 +79,7 @@ public class GameController {
 		mainMenu.addExitListener(e -> System.exit(0));
 
 		scoreScreen.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
-		instrucciones.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
+		instructionScreen.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
 		difficultyScreen.addBackListener(e -> cardLayout.show(mainPanel, "Menu"));
 	}
 

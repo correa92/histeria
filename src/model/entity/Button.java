@@ -14,7 +14,6 @@ public class Button {
 	/**
 	 * @param id
 	 * @param color
-	 * @param adjacents
 	 * @param par
 	 */
 	public Button(int id, Color color, Pair par) {
