@@ -6,7 +6,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-import model.entity.Button;
+import model.entity.Cell;
 
 public class GameScreen extends JPanel {
 
@@ -71,12 +71,12 @@ public class GameScreen extends JPanel {
 		btnBack.addActionListener(listener);
 	}
 
-	public void setButtonMatrix(Button[][] buttons) {
+	public void setButtonMatrix(Cell[][] buttons) {
 		panelGrid.removeAll();
 
 		for (int i = 0; i < buttons.length; i++) {
 			for (int j = 0; j < buttons[i].length; j++) {
-				model.entity.Button currentButton = buttons[j][i];
+				model.entity.Cell currentButton = buttons[j][i];
 				btnAux = new JButton();
 
 				int buttonId = currentButton.getId();
@@ -130,10 +130,10 @@ public class GameScreen extends JPanel {
 		return namePlayer;
 	}
 
-	public void updateMatrix(java.util.List<Button> list) {
+	public void updateMatrix(java.util.List<Cell> list) {
 		btnHelp.setBackground(colorDefault);
 		
-		for (Button button : list) {
+		for (Cell button : list) {
 			int buttonId = button.getId();
 			int x = button.getPair().getX();
 			int y = button.getPair().getY();

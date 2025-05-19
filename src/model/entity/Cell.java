@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Button {
+public class Cell {
 
 	private int id;
 	private Color color;
@@ -16,7 +16,7 @@ public class Button {
 	 * @param color
 	 * @param par
 	 */
-	public Button(int id, Color color, Pair par) {
+	public Cell(int id, Color color, Pair par) {
 		super();
 		this.id = id;
 		this.color = color;

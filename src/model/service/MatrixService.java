@@ -18,7 +18,7 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 	private int row, column, id, qtyHelp = 3;
 	private int[][] matrix;
 	private Set<Integer> listAdjacentsAux;
-	private Map<Integer, Button> buttons;
+	private Map<Integer, Cell> buttons;
 	private Color nextColor, colorDefault = new Color(200, 200, 200);
 	private ScoreService _scoreService = new ScoreService();
 
@@ -76,12 +76,12 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 		qtyHelp = 3;
 	}
 
-	public List<Button> getButtonAndAdjancents(int id) throws Exception {
+	public List<Cell> getButtonAndAdjancents(int id) throws Exception {
 
 		if (id < 0 || id >= this.buttons.size())
 			throw new Exception("El id no es válido.");
 
-		List<Button> list = new ArrayList<>();
+		List<Cell> list = new ArrayList<>();
 
 		compareButtonWithAdjacent(buttons.get(id));
 		list.add(buttons.get(id));
@@ -94,10 +94,10 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 		return list;
 	}
 
-	public Button[][] getMatrix() {
+	public Cell[][] getMatrix() {
 
-		Button[][] matrixButtons = new Button[this.row][this.column];
-		Button currentButton = null;
+		Cell[][] matrixButtons = new Cell[this.row][this.column];
+		Cell currentButton = null;
 
 		for (int i = 0; i < buttons.size(); i++) {
 			currentButton = buttons.get(i);
@@ -107,7 +107,7 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 	}
 
 	public boolean isWinner() {
-		for (Button btn : buttons.values()) {
+		for (Cell btn : buttons.values()) {
 			if (btn.getColor().equals(colorDefault))
 				return false;
 		}
@@ -127,20 +127,20 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 				matrix[j][i] = id;
 
 				Pair par = new Pair(j, i);
-				Button button = new Button(id, colorDefault, par);
+				Cell button = new Cell(id, colorDefault, par);
 				buttons.put(id, button);
 				this.id++;
 			}
 		}
 	}
 
-	private void compareButtonWithAdjacent(Button button) {
+	private void compareButtonWithAdjacent(Cell button) {
 
 		button.setColor(nextColor);
 
 		for (Integer adj : button.getAdjacents()) {
 
-			Button AdjButton = buttons.get(adj);
+			Cell AdjButton = buttons.get(adj);
 
 			if (button.getColor().equals(AdjButton.getColor())) {
 				button.setColor(colorDefault);
@@ -149,9 +149,9 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 		}
 	}
 
-	private void disabledAdjacents(Button button) {
+	private void disabledAdjacents(Cell button) {
 		for (Integer adj : button.getAdjacents()) {
-			Button adjButton = buttons.get(adj);
+			Cell adjButton = buttons.get(adj);
 			adjButton.setColor(colorDefault);
 		}
 	}
@@ -342,7 +342,7 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 	}
 
 	private void resetMatrix() {
-		for (Button btn : buttons.values()) {
+		for (Cell btn : buttons.values()) {
 			btn.setColor(colorDefault);
 		}
 	}
