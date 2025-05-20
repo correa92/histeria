@@ -76,12 +76,12 @@ public class GameScreen extends JPanel {
 
 		for (int i = 0; i < buttons.length; i++) {
 			for (int j = 0; j < buttons[i].length; j++) {
-				model.entity.Cell currentButton = buttons[j][i];
+				Cell currentButton = buttons[j][i];
 				btnAux = new JButton();
 
 				int buttonId = currentButton.getId();
 				btnAux.setActionCommand(Integer.toString(buttonId));
-				btnAux.setBackground(currentButton.getColor());
+				btnAux.setBackground(Color.decode(currentButton.getColor()));
 //				btnAux.setText("<html>Id: " + buttonId + "<br>" + currentButton.getPair().toString() + "</html>");
 
 				btnsMatrix[j][i] = btnAux;
@@ -139,7 +139,7 @@ public class GameScreen extends JPanel {
 			int y = button.getPair().getY();
 
 			btnsMatrix[x][y].setActionCommand(Integer.toString(buttonId));
-			btnsMatrix[x][y].setBackground(button.getColor());
+			btnsMatrix[x][y].setBackground(Color.decode(button.getColor()));
 		}
 
 		panelGrid.revalidate();

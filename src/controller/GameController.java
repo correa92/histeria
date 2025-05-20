@@ -97,6 +97,7 @@ public class GameController {
 		matrixService.init();
 
 		gameScreen.updateQtyHelp(matrixService.getQtyHelp());
+		
 		gameScreen.setButtonMatrix(matrixService.getMatrix());
 
 		JButton[][] buttons = gameScreen.getMatrix();
@@ -108,7 +109,7 @@ public class GameController {
 		}
 
 		gameScreen.getButtonHelp().addActionListener(e -> {
-			gameScreen.updateNextColor(matrixService.getNextColor());
+			gameScreen.updateNextColor(Color.decode(matrixService.getNextColor()));
 			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
 			gameScreen.activeHelp();
 		});
@@ -132,7 +133,7 @@ public class GameController {
 				cardLayout.show(mainPanel, "Menu");
 			}
 			
-			if (modeTest) gameScreen.updateNextColor(matrixService.getNextColorModeTest());
+			if (modeTest) gameScreen.updateNextColor(Color.decode(matrixService.getNextColorModeTest()));
 
 			gameScreen.updateScore(matrixService.getScore());
 			gameScreen.updateQtyHelp(matrixService.getQtyHelp());

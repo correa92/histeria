@@ -11,6 +11,6 @@ public interface ITraversesMatrix {
 
 	List<Cell> getButtonAndAdjancents(int id) throws Exception;
 	
-	Color getNextColor();
+	String getNextColor();
 
 }

@@ -1,6 +1,5 @@
 package model.service;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,11 +18,11 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 	private int[][] matrix;
 	private Set<Integer> listAdjacentsAux;
 	private Map<Integer, Cell> buttons;
-	private Color nextColor, colorDefault = new Color(200, 200, 200);
+	private String nextColor, colorDefault = "#C8C8C8";
 	private ScoreService _scoreService = new ScoreService();
 
-	private Color[] listColorsDefault = new Color[] { new Color(197, 108, 240), new Color(50, 255, 126),
-			new Color(255, 56, 56), new Color(255, 159, 26), new Color(255, 242, 0), new Color(24, 220, 255) };
+	private String[] listColorsDefault = new String[] { "#C56CF0", "#32FF7E", "#FF3838", "#FF9F1A", "#FFF200",
+			"#18DCFF" };
 
 	/**
 	 * @param fixedGrid
@@ -58,7 +57,7 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 		return this.qtyHelp;
 	}
 
-	public Color getNextColor() {
+	public String getNextColor() {
 		if (qtyHelp > 0) {
 			qtyHelp--;
 			return nextColor;
@@ -67,7 +66,7 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 		return colorDefault;
 	}
 
-	public Color getNextColorModeTest() {
+	public String getNextColorModeTest() {
 		return nextColor;
 	}
 
@@ -332,7 +331,7 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 		}
 	}
 
-	private Color colorRandom() {
+	private String colorRandom() {
 
 		int min = 0, max = listColorsDefault.length - 1;
 		int randomNumber;
