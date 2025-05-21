@@ -6,10 +6,15 @@ import view.GameScreen;
 import view.InstructionsScreen;
 import view.DifficultyScreen;
 import javax.swing.*;
+
+import model.Dto.CellDto;
+import model.entity.Cell;
 import model.service.MatrixService;
 import model.service.ScoreService;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameController {
 	private JFrame frame;
@@ -97,8 +102,7 @@ public class GameController {
 		matrixService.init();
 
 		gameScreen.updateQtyHelp(matrixService.getQtyHelp());
-		
-		gameScreen.setButtonMatrix(matrixService.getMatrix());
+		gameScreen.setButtonMatrix(converterMatrix(matrixService.getMatrix()));
 
 		JButton[][] buttons = gameScreen.getMatrix();
 		for (int i = 0; i < buttons.length; i++) {
@@ -125,15 +129,16 @@ public class GameController {
 
 	private void handleButtonClick(int buttonId) {
 		try {
-			gameScreen.updateMatrix(matrixService.getButtonAndAdjancents(buttonId));
+			gameScreen.updateMatrix(converterList(matrixService.getButtonAndAdjancents(buttonId)));
 
 			if (matrixService.isWinner()) {
 				gameScreen.isWinner();
 				matrixService.endGame(gameScreen.getNamePlayer());
 				cardLayout.show(mainPanel, "Menu");
 			}
-			
-			if (modeTest) gameScreen.updateNextColor(Color.decode(matrixService.getNextColorModeTest()));
+
+			if (modeTest)
+				gameScreen.updateNextColor(Color.decode(matrixService.getNextColorModeTest()));
 
 			gameScreen.updateScore(matrixService.getScore());
 			gameScreen.updateQtyHelp(matrixService.getQtyHelp());
@@ -141,5 +146,30 @@ public class GameController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private CellDto[][] converterMatrix(Cell[][] matrix) {
+		CellDto[][] matrixOut = new CellDto[matrix.length][matrix[0].length];
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				Cell auxCell = matrix[i][j];
+				CellDto buttonAux = new CellDto(auxCell.getId(), auxCell.getPair().getX(), auxCell.getPair().getY(),
+						auxCell.getColor());
+				matrixOut[i][j] = buttonAux;
+			}
+		}
+		return matrixOut;
+	}
+
+	private ArrayList<CellDto> converterList(List<Cell> list) {
+		ArrayList<CellDto> listOut = new ArrayList<>();
+		for (Cell button : list) {
+			int buttonId = button.getId();
+			int x = button.getPair().getX();
+			int y = button.getPair().getY();
+
+			listOut.add(new CellDto(buttonId, x, y, button.getColor()));
+		}
+		return listOut;
 	}
 }
