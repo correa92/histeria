@@ -9,6 +9,7 @@ public class Main {
 			new GameController();			
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println(e);
 		}
 	}
 

@@ -1,13 +1,12 @@
 package model.entity;
 
-import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Button {
+public class Cell {
 
 	private int id;
-	private Color color;
+	private String colorHex;
 	private Pair par;
 	private Set<Integer> adjacents = new HashSet<>();
 
@@ -16,10 +15,10 @@ public class Button {
 	 * @param color
 	 * @param par
 	 */
-	public Button(int id, Color color, Pair par) {
+	public Cell(int id, String color, Pair par) {
 		super();
 		this.id = id;
-		this.color = color;
+		this.colorHex = color;
 		this.par = par;
 	}
 
@@ -31,12 +30,12 @@ public class Button {
 		return id;
 	}
 
-	public Color getColor() {
-		return color;
+	public String getColor() {
+		return colorHex;
 	}
 
-	public void setColor(Color color) {
-		this.color = color;
+	public void setColor(String color) {
+		this.colorHex = color;
 	}
 
 	public void setAdjacents(Set<Integer> list) {
@@ -49,7 +48,7 @@ public class Button {
 
 	@Override
 	public String toString() {
-		return "Button [id=" + id + ", color=" + color + " par=" + par + ", adjacents=" + adjacents + "]";
+		return "Button [id=" + id + ", color=" + colorHex + " par=" + par + ", adjacents=" + adjacents + "]";
 	}
 }
 

@@ -3,14 +3,14 @@ package model.service.interfaces;
 import java.awt.Color;
 import java.util.List;
 
-import model.entity.Button;
+import model.entity.Cell;
 
 public interface ITraversesMatrix {
 
-	Button[][] getMatrix();
+	Cell[][] getMatrix();
 
-	List<Button> getButtonAndAdjancents(int id) throws Exception;
+	List<Cell> getButtonAndAdjancents(int id) throws Exception;
 	
-	Color getNextColor();
+	String getNextColor();
 
 }

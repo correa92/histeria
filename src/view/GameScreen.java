@@ -2,11 +2,12 @@ package view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-import model.entity.Button;
+import model.Dto.CellDto;
+
 
 public class GameScreen extends JPanel {
 
@@ -21,10 +22,10 @@ public class GameScreen extends JPanel {
 
 	private boolean modeTest = false;
 
-	public GameScreen( boolean modeTest, int fixedGrid) {
+	public GameScreen(boolean modeTest, int fixedGrid) {
 
 		this.modeTest = modeTest;
-		
+
 		btnsMatrix = new JButton[fixedGrid][fixedGrid];
 		setLayout(new BorderLayout());
 
@@ -38,7 +39,6 @@ public class GameScreen extends JPanel {
 		btnHelp = new JButton("?");
 		btnHelp.setBackground(colorDefault);
 		btnHelp.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-
 
 		JPanel rightButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
 		rightButtonsPanel.setOpaque(false);
@@ -66,29 +66,31 @@ public class GameScreen extends JPanel {
 		add(btnPanel, BorderLayout.SOUTH);
 	}
 
-
 	public void addBackListener(ActionListener listener) {
 		btnBack.addActionListener(listener);
 	}
 
-	public void setButtonMatrix(Button[][] buttons) {
+	public void setButtonMatrix(CellDto[][] buttons) {
 		panelGrid.removeAll();
 
 		for (int i = 0; i < buttons.length; i++) {
 			for (int j = 0; j < buttons[i].length; j++) {
-				model.entity.Button currentButton = buttons[j][i];
+				CellDto currentButton = buttons[j][i];
 				btnAux = new JButton();
 
 				int buttonId = currentButton.getId();
 				btnAux.setActionCommand(Integer.toString(buttonId));
-				btnAux.setBackground(currentButton.getColor());
-//				btnAux.setText("<html>Id: " + buttonId + "<br>" + currentButton.getPair().toString() + "</html>");
+				btnAux.setBackground(Color.decode(currentButton.getColorHex()));
 
 				btnsMatrix[j][i] = btnAux;
 				panelGrid.add(btnAux);
 			}
 		}
 
+		refresh();
+	}
+
+	public void refresh() {
 		panelGrid.revalidate();
 		panelGrid.repaint();
 	}
@@ -100,20 +102,21 @@ public class GameScreen extends JPanel {
 	public void updateScore(int score) {
 		lblScore.setText("Puntos: " + score);
 	}
-	
+
 	public void updateQtyHelp(int qtyHelp) {
 		btnHelp.setText("Ayuda: " + qtyHelp);
 	}
 
 	public void updateNextColor(Color nextColor) {
 		this.nextColor = nextColor;
-		if (this.modeTest) btnTest.setBackground(this.nextColor);
+		if (this.modeTest)
+			btnTest.setBackground(this.nextColor);
 	}
-	
+
 	public JButton getButtonHelp() {
 		return btnHelp;
 	}
-	
+
 	public void activeHelp() {
 		btnHelp.setBackground(nextColor);
 	}
@@ -130,19 +133,18 @@ public class GameScreen extends JPanel {
 		return namePlayer;
 	}
 
-	public void updateMatrix(java.util.List<Button> list) {
+	public void updateMatrix(ArrayList<CellDto> list) {
 		btnHelp.setBackground(colorDefault);
-		
-		for (Button button : list) {
+
+		for (CellDto button : list) {
 			int buttonId = button.getId();
-			int x = button.getPair().getX();
-			int y = button.getPair().getY();
+			int x = button.getX();
+			int y = button.getY();
 
 			btnsMatrix[x][y].setActionCommand(Integer.toString(buttonId));
-			btnsMatrix[x][y].setBackground(button.getColor());
+			btnsMatrix[x][y].setBackground(Color.decode(button.getColorHex()));
 		}
 
-		panelGrid.revalidate();
-		panelGrid.repaint();
+		refresh();
 	}
 }
