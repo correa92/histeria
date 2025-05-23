@@ -1,23 +1,16 @@
 package model.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
+import model.Dto.CellDto;
 import model.entity.*;
 import model.service.interfaces.ICondition;
 import model.service.interfaces.IScore;
 import model.service.interfaces.ITraversesMatrix;
 
 public class MatrixService implements ITraversesMatrix, IScore, ICondition {
-	private int row, column, id, qtyHelp = 3;
-	private int[][] matrix;
-	private Set<Integer> listAdjacentsAux;
-	private Map<Integer, Cell> buttons;
+	private int row, column, qtyHelp = 3;
+	private Cell[][] matrix;
 	private String nextColor, colorDefault = "#C8C8C8";
 	private ScoreService _scoreService = new ScoreService();
 
@@ -31,17 +24,14 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 		super();
 		this.row = fixedGrid;
 		this.column = fixedGrid;
-		matrix = new int[fixedGrid][fixedGrid];
-		buttons = new HashMap<>();
-		listAdjacentsAux = new HashSet<>();
+		matrix = new Cell[fixedGrid][fixedGrid];
 		nextColor = colorRandom();
 	}
 
 	public void init() {
 
 		try {
-			createMatrixAndDictionary();
-			AssignAdjacents();
+			createMatrix();
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -75,42 +65,18 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 		qtyHelp = 3;
 	}
 
-	public List<Cell> getButtonAndAdjancents(int id) throws Exception {
-
-		if (id < 0 || id >= this.buttons.size())
-			throw new Exception("El id no es válido.");
-
-		List<Cell> list = new ArrayList<>();
-
-		compareButtonWithAdjacent(buttons.get(id));
-		list.add(buttons.get(id));
-
-		for (Integer adj : buttons.get(id).getAdjacents()) {
-			list.add(buttons.get(adj));
-		}
-		_scoreService.addPoint();
-		nextColor = colorRandom();
-		return list;
-	}
-
-	public Cell[][] getMatrix() {
-
-		Cell[][] matrixButtons = new Cell[this.row][this.column];
-		Cell currentButton = null;
-
-		for (int i = 0; i < buttons.size(); i++) {
-			currentButton = buttons.get(i);
-			matrixButtons[currentButton.getPair().getX()][currentButton.getPair().getY()] = currentButton;
-		}
-		return matrixButtons;
-	}
-
 	public boolean isWinner() {
-		for (Cell btn : buttons.values()) {
-			if (btn.getColor().equals(colorDefault))
-				return false;
+		boolean isWinner = true;
+
+		int rows = matrix.length;
+		int cols = matrix[0].length;
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				isWinner = isWinner && matrix[i][j].isVisited();
+			}
 		}
-		return true;
+		return isWinner;
 	}
 
 	public void endGame(String namePlayer) {
@@ -120,215 +86,96 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 		resetMatrix();
 	}
 
-	private void createMatrixAndDictionary() {
+	private void createMatrix() {
 		for (int i = 0; i < column; i++) {
 			for (int j = 0; j < row; j++) {
-				matrix[j][i] = id;
-
-				Pair par = new Pair(j, i);
-				Cell button = new Cell(id, colorDefault, par);
-				buttons.put(id, button);
-				this.id++;
+				matrix[j][i] = new Cell(j, i, colorDefault);
 			}
 		}
 	}
 
-	private void compareButtonWithAdjacent(Cell button) {
+	public CellDto[][] getMatrix() {
+		int rows = matrix.length;
+		int cols = matrix[0].length;
+		CellDto[][] dtoMatrix = new CellDto[rows][cols];
 
-		button.setColor(nextColor);
-
-		for (Integer adj : button.getAdjacents()) {
-
-			Cell AdjButton = buttons.get(adj);
-
-			if (button.getColor().equals(AdjButton.getColor())) {
-				button.setColor(colorDefault);
-				disabledAdjacents(button);
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				dtoMatrix[i][j] = new CellDto(i, j, matrix[i][j].getColorHex());
 			}
 		}
+
+		return dtoMatrix;
 	}
 
-	private void disabledAdjacents(Cell button) {
-		for (Integer adj : button.getAdjacents()) {
-			Cell adjButton = buttons.get(adj);
-			adjButton.setColor(colorDefault);
-		}
-	}
+	public void printMatrix() {
+		CellDto[][] dtoMatrix = getMatrix();
 
-	private void AssignAdjacents() {
-
-		Pair par;
-		int x, y;
-
-		for (int i = 0; i < buttons.size(); i++) {
-
-			par = buttons.get(i).getPair();
-			x = par.getX();
-			y = par.getY();
-
-			if (x > 0 && y > 0 && x < (this.row - 1) && y < (this.column - 1)) {
-				assignsInternalPairs(par);
-				listAdjacentsAux.remove(i);
-				buttons.get(i).setAdjacents(listAdjacentsAux);
-				listAdjacentsAux.clear();
-			} else {
-				assignsExternalPairs(par);
-				listAdjacentsAux.remove(i);
-				buttons.get(i).setAdjacents(listAdjacentsAux);
-				listAdjacentsAux.clear();
+		for (int i = 0; i < dtoMatrix.length; i++) {
+			for (int j = 0; j < dtoMatrix[i].length; j++) {
+				CellDto cell = dtoMatrix[j][i];
+				System.out.print("[" + cell.getX() + "," + cell.getY() + "," + cell.getColorHex() + "] ");
 			}
+			System.out.println();
 		}
 	}
 
-	private void assignsInternalPairs(Pair par) {
-
-		int x = par.getX() - 1;
-		int y = par.getY() - 1;
-
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				listAdjacentsAux.add(matrix[x][y]);
-				y++;
-			}
-			y = par.getY() - 1; // reinicio X
-			x++;
+	public void updateToDefaultColorIfSameAdjacent(int x, int y) {
+		Cell current = matrix[x][y];
+		current.setColorHex(nextColor);
+		_scoreService.addPoint();
+		if (!hasSameColorAdjacent(x, y)) {
+			current.setVisited(true);
+			this.nextColor = colorRandom();
+			return;
 		}
-	}
 
-	private void assignsExternalPairs(Pair par) {
+		for (int directRow = -1; directRow <= 1; directRow++) {
+			for (int directColumn = -1; directColumn <= 1; directColumn++) {
+				int newRow = x + directRow;
+				int newCol = y + directColumn;
 
-		int x = par.getX();
-		int y = par.getY();
+				if (directRow == 0 && directColumn == 0)
+					continue;
 
-		// recorre primer fila => y == 0
-		if (y == 0) {
-			for (int i = 0; i < this.row; i++) {
-
-				if (i == 0 || i == (this.row - 1)) {
-					assignsAtExtremes(par);
-				} else {
-					// (0;1)(0;2) buscar los hijos de estos puntos
-					assignsAtRowAndColumnBorder(par);
+				if (isInBounds(newRow, newCol)) {
+					Cell adjacent = matrix[newRow][newCol];
+					adjacent.setColorHex(colorDefault);
+					adjacent.setVisited(false);
 				}
 			}
 		}
 
-		// Recorre primer columna => x == 0
-		if (x == 0) {
+		current.setColorHex(colorDefault);
+		current.setVisited(false);
+	}
 
-			for (int i = 0; i < this.column; i++) {
+	private boolean hasSameColorAdjacent(int row, int col) {
+		int rows = matrix.length;
+		int cols = matrix[0].length;
+		String color = matrix[row][col].getColorHex();
 
-				if (i == 0 || i == (this.column - 1)) {
-					// (o;o) extremo ARRIBA IZQ / (0;4)extremo ABAJO IZQ
-					assignsAtExtremes(par);
-				} else {
-					// (0;1)(0;2) buscar los hijos de estos puntos
-					assignsAtRowAndColumnBorder(par);
+		for (int directRow = -1; directRow <= 1; directRow++) {
+			for (int directColumn = -1; directColumn <= 1; directColumn++) {
+				int newRow = row + directRow;
+				int newCol = col + directColumn;
+
+				if (directRow == 0 && directColumn == 0)
+					continue;
+
+				if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
+					Cell adjacent = matrix[newRow][newCol];
+					if (adjacent.getColorHex().equals(color)) {
+						return true;
+					}
 				}
 			}
 		}
-
-		// recorre ultima columna => x == row.length
-		if (x == this.row - 1) {
-
-			for (int i = 0; i < this.column; i++) {
-
-				if (i == 0 || i == (this.column - 1)) {
-					// (4;0) extremo ARRIBA DER (4;4) extremo ABAJO DER
-					assignsAtExtremes(par);
-				} else {
-					// (4;1)(4;2) buscar los hijos de estos puntos
-					assignsAtRowAndColumnBorder(par);
-				}
-			}
-		}
-
-		// recorre ultima fila => y == column.length
-		if (y == this.column - 1) {
-			for (int i = 0; i < this.row; i++) {
-
-				if (i == 0 || i == (this.row - 1)) {
-					// (0;4) extremo ABAJO IZQ (4;4) extremo ABAJO DER
-					assignsAtExtremes(par);
-				} else {
-					// (1;4)(2;4) buscar los hijos de estos puntos
-					assignsAtRowAndColumnBorder(par);
-				}
-			}
-		}
-
+		return false;
 	}
 
-	private void assignsAtExtremes(Pair par) {
-		int x = par.getX();
-		int y = par.getY();
-
-		if (x == 0 && y == 0) {
-			assignsAdjacentsToExtremes(x, y);
-		}
-
-		if (x == this.row - 1 && y == 0) {
-			assignsAdjacentsToExtremes(this.row - 2, y);
-		}
-
-		if (x == 0 && y == this.column - 1) {
-			assignsAdjacentsToExtremes(x, this.column - 2);
-		}
-
-		if (x == this.row - 1 && y == this.column - 1) {
-			assignsAdjacentsToExtremes(this.row - 2, this.column - 2);
-		}
-	}
-
-	private void assignsAtRowAndColumnBorder(Pair par) {
-		int x = par.getX();
-		int y = par.getY();
-
-		if (x > 0 && x < this.row - 1 && y < 1) {
-			assignsAdjacentsToRows(x - 1, y);
-			return;
-		}
-
-		if (x > 0 && x < this.row - 1 && y == this.column - 1) {
-			assignsAdjacentsToRows(x - 1, this.column - 2);
-			return;
-		}
-
-		if (y > 0 && y < this.column - 1 && x < 1) {
-			assignsAdjacentsToColumns(x, y - 1);
-			return;
-		}
-
-		if (y > 0 && y < this.column - 1 && x == this.row - 1) {
-			assignsAdjacentsToColumns(this.row - 2, y - 1);
-			return;
-		}
-	}
-
-	private void assignsAdjacentsToExtremes(int a, int b) {
-		for (int i = a; i < a + 2; i++) {
-			for (int j = b; j < b + 2; j++) {
-				listAdjacentsAux.add(matrix[i][j]);
-			}
-		}
-	}
-
-	// recorre 6 posiciones, 2 columnas y 3 filas
-	private void assignsAdjacentsToColumns(int a, int b) {
-		for (int i = a; i < a + 2; i++) {
-			for (int j = b; j < b + 3; j++) {
-				listAdjacentsAux.add(matrix[i][j]);
-			}
-		}
-	}
-
-	// recorre 6 posiciones, 3 columnas y 2 filas
-	private void assignsAdjacentsToRows(int a, int b) {
-		for (int i = a; i < a + 3; i++) {
-			for (int j = b; j < b + 2; j++) {
-				listAdjacentsAux.add(matrix[i][j]);
-			}
-		}
+	private boolean isInBounds(int row, int col) {
+		return row >= 0 && row < matrix.length && col >= 0 && col < matrix[0].length;
 	}
 
 	private String colorRandom() {
@@ -341,13 +188,14 @@ public class MatrixService implements ITraversesMatrix, IScore, ICondition {
 	}
 
 	private void resetMatrix() {
-		for (Cell btn : buttons.values()) {
-			btn.setColor(colorDefault);
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				matrix[j][i].setColorHex(colorDefault);
+			}
 		}
 	}
 
 	private void resetData() {
-		this.id = 0;
 		this.qtyHelp = 3;
 	}
 

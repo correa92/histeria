@@ -3,7 +3,7 @@ package view;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import model.entity.Score;
+import model.Dto.ScoreDto;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -65,10 +65,10 @@ public class ScoreScreen extends JPanel {
         btnBack.addActionListener(listener);
     }
 
-    public void updateScores(List<Score> scores) {
+    public void updateScores(List<ScoreDto> scores) {
         tableModel.setRowCount(0);
         for (int i = 0; i < scores.size(); i++) {
-            Score score = scores.get(i);
+        	ScoreDto score = scores.get(i);
             Object[] row = {i + 1, score.getPlayerName(), score.getPoints()};
             tableModel.addRow(row);
         }

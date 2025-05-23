@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import model.Dto.CellDto;
 
-
 public class GameScreen extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -77,16 +76,17 @@ public class GameScreen extends JPanel {
 			for (int j = 0; j < buttons[i].length; j++) {
 				CellDto currentButton = buttons[j][i];
 				btnAux = new JButton();
-
-				int buttonId = currentButton.getId();
-				btnAux.setActionCommand(Integer.toString(buttonId));
 				btnAux.setBackground(Color.decode(currentButton.getColorHex()));
+				btnAux.setFont(new Font("Arial", Font.BOLD, 15));
+
+				if (modeTest)
+					btnAux.setText("<html>" + currentButton.getColorHex() + "<br> (" + currentButton.getX() + ","
+							+ currentButton.getY() + ")</html>");
 
 				btnsMatrix[j][i] = btnAux;
 				panelGrid.add(btnAux);
 			}
 		}
-
 		refresh();
 	}
 
@@ -133,18 +133,38 @@ public class GameScreen extends JPanel {
 		return namePlayer;
 	}
 
-	public void updateMatrix(ArrayList<CellDto> list) {
+//	public void updateMatrix(CellDto[][] newMatrix) {
+//		btnHelp.setBackground(colorDefault);
+//
+//
+//		btnsMatrix[x][y].setBackground(Color.decode(button.getColorHex()));
+
+//		refresh();
+//	}
+
+	public void updateMatrix(CellDto[][] newMatrix) {
 		btnHelp.setBackground(colorDefault);
 
-		for (CellDto button : list) {
-			int buttonId = button.getId();
-			int x = button.getX();
-			int y = button.getY();
+		for (int i = 0; i < newMatrix.length; i++) {
+			for (int j = 0; j < newMatrix[i].length; j++) {
+				CellDto cell = newMatrix[i][j];
+				JButton button = btnsMatrix[i][j];
 
-			btnsMatrix[x][y].setActionCommand(Integer.toString(buttonId));
-			btnsMatrix[x][y].setBackground(Color.decode(button.getColorHex()));
+				if (cell != null && cell.getColorHex() != null) {
+					button.setBackground(Color.decode(cell.getColorHex()));
+					button.setFont(new Font("Arial", Font.BOLD, 15));
+
+					if (modeTest)
+						button.setText("<html>" + cell.getColorHex() + "<br> (" + cell.getX() + "," + cell.getY()
+								+ ")</html>");
+
+				} else {
+					button.setBackground(colorDefault);
+				}
+			}
 		}
 
 		refresh();
 	}
+
 }
