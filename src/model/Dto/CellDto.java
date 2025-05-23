@@ -2,7 +2,6 @@ package model.Dto;
 
 public class CellDto {
 
-	private int id;
 	private int x;
 	private int y;
 	private String colorHex;
@@ -13,15 +12,10 @@ public class CellDto {
 	 * @param y
 	 * @param colorHex
 	 */
-	public CellDto(int id, int x, int y, String colorHex) {
-		this.id = id;
+	public CellDto( int x, int y, String colorHex) {
 		this.x = x;
 		this.y = y;
 		this.colorHex = colorHex;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public int getX() {

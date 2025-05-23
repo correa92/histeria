@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
+import model.Dto.ScoreDto;
 import model.entity.Score;
 
 public class ScoreService {
@@ -22,7 +24,7 @@ public class ScoreService {
 		return currentUser.getPoints();
 	}
 
-	public List<Score> getScores() {
+	public List<ScoreDto> getScores() {
 		try {
 			loadScores();
 			scoreList.sort(Comparator.comparingInt(Score::getPoints));
@@ -30,7 +32,10 @@ public class ScoreService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return scoreList.size() > 10 ? scoreList.subList(0, 10) : scoreList;
+		List<ScoreDto> scoreDtos = scoreList.stream()
+				.map(score -> new ScoreDto(score.getPlayerName(), score.getPoints())).collect(Collectors.toList());
+
+		return scoreDtos.size() > 10 ? scoreDtos.subList(0, 10) : scoreDtos;
 	}
 
 	public void resetScore() {

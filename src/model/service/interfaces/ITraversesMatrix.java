@@ -1,16 +1,12 @@
 package model.service.interfaces;
 
-import java.awt.Color;
-import java.util.List;
-
-import model.entity.Cell;
+import model.Dto.CellDto;
 
 public interface ITraversesMatrix {
 
-	Cell[][] getMatrix();
-
-	List<Cell> getButtonAndAdjancents(int id) throws Exception;
-	
+	CellDto[][] getMatrix();
+	void updateToDefaultColorIfSameAdjacent(int x, int y);
 	String getNextColor();
-
+	String getNextColorModeTest();
+	int getQtyHelp();
 }
