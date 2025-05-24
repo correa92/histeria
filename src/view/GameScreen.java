@@ -79,9 +79,9 @@ public class GameScreen extends JPanel {
 				btnAux.setBackground(Color.decode(currentButton.getColorHex()));
 				btnAux.setFont(new Font("Arial", Font.BOLD, 15));
 
-				if (modeTest)
-					btnAux.setText("<html>" + currentButton.getColorHex() + "<br> (" + currentButton.getX() + ","
-							+ currentButton.getY() + ")</html>");
+//				if (modeTest)
+//					btnAux.setText("<html>" + currentButton.getColorHex() + "<br> (" + currentButton.getX() + ","
+//							+ currentButton.getY() + ")</html>");
 
 				btnsMatrix[j][i] = btnAux;
 				panelGrid.add(btnAux);
@@ -133,15 +133,6 @@ public class GameScreen extends JPanel {
 		return namePlayer;
 	}
 
-//	public void updateMatrix(CellDto[][] newMatrix) {
-//		btnHelp.setBackground(colorDefault);
-//
-//
-//		btnsMatrix[x][y].setBackground(Color.decode(button.getColorHex()));
-
-//		refresh();
-//	}
-
 	public void updateMatrix(CellDto[][] newMatrix) {
 		btnHelp.setBackground(colorDefault);
 
@@ -154,9 +145,9 @@ public class GameScreen extends JPanel {
 					button.setBackground(Color.decode(cell.getColorHex()));
 					button.setFont(new Font("Arial", Font.BOLD, 15));
 
-					if (modeTest)
-						button.setText("<html>" + cell.getColorHex() + "<br> (" + cell.getX() + "," + cell.getY()
-								+ ")</html>");
+//					if (modeTest)
+//						button.setText("<html>" + cell.getColorHex() + "<br> (" + cell.getX() + "," + cell.getY()
+//								+ ")</html>");
 
 				} else {
 					button.setBackground(colorDefault);
